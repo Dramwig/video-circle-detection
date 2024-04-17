@@ -69,9 +69,9 @@ def clear_folder(folder_path):
         os.makedirs(folder_path)
     
 
-def train(num_epochs = 500):
+def train(num_epochs = 500, batch_size = 32):
     
-    train_loader, validation_loader, test_loader = get_dataset()
+    train_loader, validation_loader, test_loader = get_dataset(batch_size = batch_size)
     
     # Define the device based on the availability of CUDA
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
