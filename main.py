@@ -15,5 +15,5 @@ if __name__ == '__main__':
     
     # frame_processing()
     # data_generator()
-    # train(num_epochs = 1000)
+    # train(num_epochs = 500)
     # test()
