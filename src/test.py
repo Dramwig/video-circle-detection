@@ -87,11 +87,11 @@ def fft(output_values, str_index = ''):
 # Parameters
 if_show = False
 
-def test(dataset_files = None, str_index = ''):
+def test(dataset_files = None, str_index = '', model_load_path = 'archive/resnet50_regression_val_0.0081.pth'):
     global device,criterion
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     criterion = nn.MSELoss() # 定义损失函数
-    model_load = load_model('archive/resnet50_regression_val_0.0081.pth') # 加载模型
+    model_load = load_model(model_load_path) # 加载模型
     
     # 获取测试集上的损失值
     if if_show:

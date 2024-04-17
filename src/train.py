@@ -69,7 +69,7 @@ def clear_folder(folder_path):
         os.makedirs(folder_path)
     
 
-def train():
+def train(num_epochs = 500):
     
     train_loader, validation_loader, test_loader = get_dataset()
     
@@ -89,7 +89,7 @@ def train():
     clear_folder(save_folder_path)
         
     # Training process
-    num_epochs = 500  # Define the number of epochs for training
+    # num_epochs = 500  # Define the number of epochs for training
     train_losses = []
     val_losses = []
     min_val_lost = 99999999

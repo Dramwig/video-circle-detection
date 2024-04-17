@@ -5,9 +5,15 @@ from src.test import test
 
 
 if __name__ == '__main__':
-    #dir_processed_data = frame_processing()
-    #data_generator()
-    #train()
-    #test()
-    for i in range(1, 6):
+    for i in range(1, 6+1):
+        frame_processing(str_index = str(i))
+    # data_generator()
+    # train()
+    for i in range(1, 6+1):
         test(str_index = str(i))
+    
+    
+    # frame_processing()
+    # data_generator()
+    # train(num_epochs = 1000)
+    # test()

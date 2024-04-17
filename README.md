@@ -14,29 +14,34 @@
 
 ```
 D:.
-│  output_values.xlsx
-│  README.md
-│  resnet50_regression_0.0310.pth
 │  数据处理和生成.ipynb
 │  模型和训练.ipynb
+│  main.py
+├─archive
 ├─data
-│  │  振动视频1.avi
-│  ├─cropped 
-│  ├─original  
-│  ├─processed   
-│  ├─test   
-│  ├─train    
-│  └─validation        
-└─img
+│  │  振动视频1.avi 
+│  ├─cropped
+│  ├─original
+│  ├─processed
+│  ├─test
+│  ├─train
+│  └─validation
+├─img
+├─save
+├─src
+│  └─__pycache__
+└─__pycache__
 ```
 
 ### 目录说明
 
-- **data**： 包含项目中使用的所有数据集和视频文件。
- - **cropped**： 存储从视频中裁剪的图像。
- - **original**： 包含从视频中提取的原始帧。
- - **processed**： 保存经过处理的图像，以备模型输入。
- - **train/test/validation**： 包含用于训练、测试和验证模型的图像和中心坐标文件。
+- **data**： 包含项目中使用的所有数据集、视频文件、中间数据。
+  - **original/cropped**： 存储从视频中提取、裁剪的图像。
+  - **processed(i)**： 保存经过处理的图像，以备模型输入，i表示为视频中的圆环编号。
+  - **train/test/validation**： 包含用于训练、测试和验证模型的图像和中心坐标文件。
+
+- **save**：保存训练模型参数、损失曲线值、位移识别结果、FFT结果，每次训练后清空。
+- **src**：存储程序。
 
 ## 功能与目的
 
