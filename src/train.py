@@ -8,7 +8,7 @@ from src.get_dataset import get_dataset
 from src.module import ResNet50Regression
 from torch import nn
 
-def evaluate(model, test_loader):
+def evaluate(model, test_loader, device, criterion):
     model.eval()  # 将模型设置为评估模式
     total_loss = 0
     with torch.no_grad():  # 禁用梯度计算
@@ -34,7 +34,7 @@ def show_losses(train_losses, val_losses):
         'Train Loss': train_losses,
         'Validation Loss': val_losses
     })
-    csv_file_path = 'data/losses.csv'  # You can change this to your desired path and filename
+    csv_file_path = 'save/losses.csv'  # You can change this to your desired path and filename
     losses_df.to_csv(csv_file_path, index=False) # Save the DataFrame to a CSV file
     print(f'Losses saved to {csv_file_path}')
     
@@ -74,7 +74,6 @@ def train():
     train_loader, validation_loader, test_loader = get_dataset()
     
     # Define the device based on the availability of CUDA
-    global device
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f'use {device}')
 
@@ -82,7 +81,6 @@ def train():
     model = ResNet50Regression().to(device)
 
     # Define loss function and optimizer
-    global criterion
     criterion = nn.MSELoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
@@ -123,7 +121,7 @@ def train():
 
         # Print average loss for the epoch
         avg_train_loss = total_loss / len(train_loader)
-        avg_val_loss = evaluate(model, validation_loader)
+        avg_val_loss = evaluate(model, validation_loader, device, criterion)
         
         train_losses.append(avg_train_loss)
         val_losses.append(avg_val_loss)
@@ -136,7 +134,7 @@ def train():
             torch.save(model.state_dict(), model_name)
         
     # 获取测试集上的损失值
-    test_loss = evaluate(model, test_loader)
+    test_loss = evaluate(model, test_loader, device, criterion)
     print(f'Test loss: {test_loss}')
 
     # 保存模型

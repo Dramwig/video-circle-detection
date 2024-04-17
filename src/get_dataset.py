@@ -7,9 +7,9 @@ from PIL import Image
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-def read_dataset(dataset_files, transform):
+def read_dataset(dataset_files, transform, kind = ''):
     dataset = []
-    for txt_file, png_file in tqdm(dataset_files, desc="Processing dataset", total=len(dataset_files)):
+    for txt_file, png_file in tqdm(dataset_files, desc=f"Processing {kind} dataset", total=len(dataset_files)):
         image = Image.open(png_file).convert('L')  # 转换为灰度图像
         image = transform(image)
         # 读取txt文件，每个txt包含"x,y"格式的数据
@@ -102,6 +102,31 @@ def get_dataset(batch_size = 32):
     print("标签形状:", labels.shape)  # 应为(batch_size, 2)，每个样本有两个坐标值
     
     return train_loader, validation_loader, test_loader
+    
+def get_kind_dataloader(batch_size = 32, kind = 'train'):
+    # 文件夹路径
+    dir_data = "data"
+
+    # 列出文件夹下的所有文件
+    files_data_all = [os.path.join(dir_data, kind, file) for file in os.listdir(os.path.join(dir_data, kind))]
+    
+    # 分别筛选出.txt和.png文件
+    files_data_txt = [file for file in files_data_all if file.endswith('.txt')]
+    files_data_png = [file for file in files_data_all if file.endswith('.png')]
+
+    # 创建训练、验证和测试数据集
+    dataset_files = pair_files(files_data_txt, files_data_png)
+
+    # Preprocess the image  定义数据转换
+    transform = get_transform()
+
+    # 创建训练、验证和测试数据集
+    dataset = read_dataset(dataset_files, transform, kind = kind)
+
+    # 创建 DataLoader 加载训练数据集
+    dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
+    
+    return dataloader
     
 # Parameters
 if_show = False
