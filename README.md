@@ -7,8 +7,9 @@
 本资源库包含用于视频帧提取、图像处理、数据集生成和模型训练的脚本和笔记本，重点关注图像分析任务。这些组件旨在支持信号处理、计算机视觉和机器学习等领域的研究与开发。
 
 <div align=center>
-  <img src="img/%E6%8C%AF%E5%8A%A8%E8%A7%86%E9%A2%91.gif" alt="振动视频" width="800px" />
+  <img src="img/%E6%8C%AF%E5%8A%A8%E8%A7%86%E9%A2%91.gif" alt="振动视频" width="400px" />
 </div>
+
 
 
 ## 项目结构
@@ -49,8 +50,8 @@ D:.
 ## 功能与目的
 
 <div align=center>
-  <img src="img/2.png" alt="振动视频" width="600px" />
-  <img src="img/3.png" alt="振动视频" width="600px" />
+  <img src="img/2.png" alt="振动视频" width="200px" />
+  <img src="img/3.png" alt="振动视频" width="200px" />
 </div>
 
 1. **视频帧提取**： 脚本首先从视频文件中提取帧，并将其保存为 BMP 图像，为进一步处理做好准备。
