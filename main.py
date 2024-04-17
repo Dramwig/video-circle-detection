@@ -8,4 +8,6 @@ if __name__ == '__main__':
     #dir_processed_data = frame_processing()
     #data_generator()
     #train()
-    test()
+    #test()
+    for i in range(1, 6):
+        test(str_index = str(i))
