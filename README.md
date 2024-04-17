@@ -6,7 +6,10 @@
 
 本资源库包含用于视频帧提取、图像处理、数据集生成和模型训练的脚本和笔记本，重点关注图像分析任务。这些组件旨在支持信号处理、计算机视觉和机器学习等领域的研究与开发。
 
-![振动视频](img/%E6%8C%AF%E5%8A%A8%E8%A7%86%E9%A2%91.gif)
+<div align=center>
+  <img src="img/%E6%8C%AF%E5%8A%A8%E8%A7%86%E9%A2%91.gif" alt="振动视频" width="800px" />
+</div>
+
 
 ## 项目结构
 
@@ -45,7 +48,10 @@ D:.
 
 ## 功能与目的
 
-<img src="img/2.png" alt="2" style="zoom:33%;" />
+<div align=center>
+  <img src="img/2.png" alt="振动视频" width="600px" />
+  <img src="img/3.png" alt="振动视频" width="600px" />
+</div>
 
 1. **视频帧提取**： 脚本首先从视频文件中提取帧，并将其保存为 BMP 图像，为进一步处理做好准备。
 
@@ -65,8 +71,6 @@ D:.
 
 该脚本适用于需要进行全面预处理、分析和模型训练的学术和研究用途。它在机器学习、计算机视觉和数字信号处理等领域尤其有用。
 
-<img src="img/3.png" alt="3" style="zoom:25%;" />
-
 ## 设置
 
 ### 先决条件
@@ -83,18 +87,17 @@ D:.
 
 克隆软件源并导航至目录：
 ```bash
-git clone <repository-url>
-cd <仓库目录>
+git clone https://github.com/Dramwig/video-circle-detection.git
 ```
 安装所需的 Python 软件包：
 
-```
+```bash
 pip install -r requirements.txt
 ```
 
 或者
 
-```
+```bash
 pip install matplotlib==3.6.2
 pip install numpy==1.24.4
 pip install opencv-python-headless==4.9.0.80
@@ -105,14 +108,17 @@ pip3 install torch torchvision torchaudio --index-url https://download.pytorch.o
 
 ## 使用方法
 
-要运行脚本，请导航到项目的根目录，然后直接执行笔记本或 Python 脚本。例如，处理图像：
+### 使用 Jupyter Notebook
+
+1. 导航到项目的根目录，然后直接执行 `jupyter notebook`,
+2. 打开“数据处理和生成.ipynb”和“模型和训练.ipynb”文件以查看代码和执行操作。
+
+### 使用脚本运行方式
+
+要运行脚本，请导航到项目的根目录，然后直接执行 Python 脚本或在终端运行：
 
 ```bash
-python 数据处理和生成.ipynb
-```
-并训练模型：
-```bash
-python 模型和训练.ipynb
+python main.py
 ```
 
 ## 投稿
