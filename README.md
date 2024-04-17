@@ -1,10 +1,12 @@
-# 视频帧小圈的目标检测与定位
+# 视频帧小圆环的目标检测与定位
 
-使用 PyTorch 定位视频帧中的圆环
+使用 PyTorch 定位视频帧中的圆环。
 
 ## 简介
 
 本资源库包含用于视频帧提取、图像处理、数据集生成和模型训练的脚本和笔记本，重点关注图像分析任务。这些组件旨在支持信号处理、计算机视觉和机器学习等领域的研究与开发。
+
+![振动视频](img/%E6%8C%AF%E5%8A%A8%E8%A7%86%E9%A2%91.gif)
 
 ## 项目结构
 
@@ -38,6 +40,8 @@ D:.
 
 ## 功能与目的
 
+<img src="img/2.png" alt="2" style="zoom:33%;" />
+
 1. **视频帧提取**： 脚本首先从视频文件中提取帧，并将其保存为 BMP 图像，为进一步处理做好准备。
 
 2. **图像裁剪和透视变换**： 它通过裁剪和应用透视变换来处理图像，以聚焦于帧内的特定区域。
@@ -56,6 +60,8 @@ D:.
 
 该脚本适用于需要进行全面预处理、分析和模型训练的学术和研究用途。它在机器学习、计算机视觉和数字信号处理等领域尤其有用。
 
+<img src="img/3.png" alt="3" style="zoom:25%;" />
+
 ## 设置
 
 ### 先决条件
@@ -68,7 +74,7 @@ D:.
 - matplotlib
 - tqdm
 
-#### 安装
+### 安装
 
 克隆软件源并导航至目录：
 ```bash
@@ -78,9 +84,18 @@ cd <仓库目录>
 安装所需的 Python 软件包：
 
 ```
-while read requirement; do conda install --yes $requirement; done < requirements.txt
-# 或者
 pip install -r requirements.txt
+```
+
+或者
+
+```
+pip install matplotlib==3.6.2
+pip install numpy==1.24.4
+pip install opencv-python-headless==4.9.0.80
+pip install pandas==2.0.2
+pip install tqdm==4.66.1
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 ```
 
 ## 使用方法
