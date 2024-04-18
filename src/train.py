@@ -70,7 +70,7 @@ def clear_folder(folder_path):
     
 
 def train(num_epochs = 500, batch_size = 32):
-    
+    # Get the dataset loaders
     train_loader, validation_loader, test_loader = get_dataset(batch_size = batch_size)
     
     # Define the device based on the availability of CUDA
@@ -90,7 +90,6 @@ def train(num_epochs = 500, batch_size = 32):
     clear_folder(save_folder_path)
         
     # Training process
-    # num_epochs = 500  # Define the number of epochs for training
     train_losses = []
     val_losses = []
     min_val_lost = 99999999
@@ -108,17 +107,11 @@ def train(num_epochs = 500, batch_size = 32):
             targets = targets.to(device)
 
             optimizer.zero_grad()  # Zero the gradients
-            
-            # Perform the forward pass
             outputs = model(images)
-            
-            # Calculate the loss
             loss = criterion(outputs, targets[:,0].unsqueeze(1))
-            total_loss += loss.item()
-            
-            # Perform backpropagation
             loss.backward()
             optimizer.step()
+            total_loss += loss.item()
             
         # Print average loss for the epoch
         avg_train_loss = total_loss / len(train_loader)
