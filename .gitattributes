@@ -1,3 +1,2 @@
-*.md linguist-language=Markdown 
 *.py linguist-language=Python 
-*.ipynb linguist-language=Jupyter Notebook
+*.ipynb linguist-language=Python
