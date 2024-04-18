@@ -83,6 +83,7 @@ def train(num_epochs = 500, batch_size = 32):
     # Define loss function and optimizer
     criterion = nn.MSELoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.9) # 学习率调整策略
 
     # 定义文件夹路径
     save_folder_path = 'save'
@@ -118,15 +119,18 @@ def train(num_epochs = 500, batch_size = 32):
             # Perform backpropagation
             loss.backward()
             optimizer.step()
-
+            
         # Print average loss for the epoch
         avg_train_loss = total_loss / len(train_loader)
         avg_val_loss = evaluate(model, validation_loader, device, criterion)
         
         train_losses.append(avg_train_loss)
         val_losses.append(avg_val_loss)
-
-        print(f'Epoch {epoch+1}/{num_epochs}, Train loss: {avg_train_loss:.4f}, Validation loss: {avg_val_loss:.4f}')
+        
+        # 每个epoch后更新学习率
+        scheduler.step()
+        param_group = optimizer.param_groups[0]
+        print(f'Epoch {epoch+1}/{num_epochs}, Train loss: {avg_train_loss:.4f}, Validation loss: {avg_val_loss:.4f}, Current learning rate: {param_group["lr"]:.5f}')
 
         if min_val_lost > avg_val_loss:
             min_val_lost = avg_val_loss
@@ -138,6 +142,8 @@ def train(num_epochs = 500, batch_size = 32):
     print(f'Test loss: {test_loss}')
 
     # 保存模型
+    if os.path.exists('archive') == False:
+        os.makedirs('archive')
     model_name = f'archive/resnet50_regression_test_{test_loss:.4f}.pth'  # 使用损失值作为文件名的一部分
     torch.save(model.state_dict(), model_name)
 

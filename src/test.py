@@ -87,7 +87,7 @@ def fft(output_values, str_index = ''):
 # Parameters
 if_show = False
 
-def test(dataset_files = None, str_index = '', model_load_path = 'archive/resnet50_regression_val_0.0081.pth'):
+def test(dataset_files = None, str_index = '', model_load_path = 'archive/resnet50_regression_val_0.0081.pth', orientations = 'y'):
     global device,criterion
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     criterion = nn.MSELoss() # 定义损失函数
@@ -104,12 +104,19 @@ def test(dataset_files = None, str_index = '', model_load_path = 'archive/resnet
         dataset_files = [os.path.join(dir_data, file) for file in os.listdir(dir_data)] # 列出文件夹下的文件路径
 
     # 定义数据转换
-    transform = transforms.Compose([
-        transforms.Resize((224, 224)),  # Resize to fit ResNet50 input dimensions
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.5], std=[0.5]),  # Normalize for single-channel
-        transforms.Lambda(lambda x: x.transpose(1, 2)) # 转置!!!用于测试y方向
-    ])
+    if orientations == 'y':
+        transform = transforms.Compose([
+            transforms.Resize((224, 224)),  # Resize to fit ResNet50 input dimensions
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.5], std=[0.5]),  # Normalize for single-channel
+            transforms.Lambda(lambda x: x.transpose(1, 2)) # 转置!!!用于测试y方向
+        ])
+    else:
+        transform = transforms.Compose([
+            transforms.Resize((224, 224)),  # Resize to fit ResNet50 input dimensions
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.5], std=[0.5])  # Normalize for single-channel
+        ])
 
     outputs = []
     model_load.eval()  # 将模型设置为评估模式
