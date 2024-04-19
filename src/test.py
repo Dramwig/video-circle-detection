@@ -9,13 +9,13 @@ from torchvision import transforms
 import pandas as pd
 import os
 from tqdm import tqdm
-from src.module import ResNet50Regression
+from src.module import UserModule
 from src.get_dataset import get_dataset, get_kind_dataloader
 from src.train import evaluate
 
 def load_model(model_path):
     # Initialize the model
-    model_load = ResNet50Regression().to(device)
+    model_load = UserModule().to(device)
     model_load.load_state_dict(torch.load(model_path))
     return model_load
 
@@ -32,11 +32,11 @@ def plot(output_values, str_index = ''):
         plt.show()
 
     # Convert output_values to a DataFrame
-    folder_path = 'save'
-    if not os.path.exists(folder_path):
-        os.makedirs(folder_path)
+    save_folder_path = 'save'
+    if not os.path.exists(save_folder_path):
+        os.makedirs(save_folder_path)
     df = pd.DataFrame({'Output Values': output_values})
-    excel_file_path = f'{folder_path}/output_values{str_index}.xlsx'
+    excel_file_path = f'{save_folder_path}/output_values{str_index}.xlsx'
     df.to_excel(excel_file_path, index=False)
 
     print(f'Output values saved to {excel_file_path}')
@@ -79,7 +79,7 @@ def fft(output_values, str_index = ''):
     df = pd.DataFrame(data)
 
     # 保存为CSV文件
-    csv_filename = f'save/Frequency_Magnitude_Data{str_index}.csv'
+    csv_filename = f'{save_folder_path}/Frequency_Magnitude_Data{str_index}.csv'
     df.to_csv(csv_filename, index=False)
 
     print(f"FFT values saved to {csv_filename}")
@@ -91,7 +91,11 @@ def test(dataset_files = None, str_index = '', model_load_path = 'archive/resnet
     global device,criterion
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     criterion = nn.MSELoss() # 定义损失函数
-    model_load = load_model(model_load_path) # 加载模型
+    try:
+        model_load = load_model(model_load_path) # 加载模型
+    except:
+        print('Model not found')
+        return
     
     # 获取测试集上的损失值
     if if_show:
@@ -131,6 +135,9 @@ def test(dataset_files = None, str_index = '', model_load_path = 'archive/resnet
 
     plot(output_values, str_index)
     fft(output_values, str_index)
+    
+# Parameters
+save_folder_path = 'save'
 
 if __name__ == '__main__':
     # for i in range(1, 6):

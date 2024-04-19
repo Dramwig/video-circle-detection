@@ -5,7 +5,7 @@ import os
 import shutil
 import matplotlib.pyplot as plt
 from src.get_dataset import get_dataset
-from src.module import ResNet50Regression
+from src.module import UserModule
 from torch import nn
 
 def evaluate(model, test_loader, device, criterion):
@@ -34,7 +34,7 @@ def show_losses(train_losses, val_losses):
         'Train Loss': train_losses,
         'Validation Loss': val_losses
     })
-    csv_file_path = 'save/losses.csv'  # You can change this to your desired path and filename
+    csv_file_path = f'{save_folder_path}/losses.csv'  # You can change this to your desired path and filename
     losses_df.to_csv(csv_file_path, index=False) # Save the DataFrame to a CSV file
     print(f'Losses saved to {csv_file_path}')
     
@@ -69,7 +69,7 @@ def clear_folder(folder_path):
         os.makedirs(folder_path)
     
 
-def train(num_epochs = 500, batch_size = 32):
+def train(num_epochs = 500, batch_size = 32, if_use_scheduler = False):
     # Get the dataset loaders
     train_loader, validation_loader, test_loader = get_dataset(batch_size = batch_size)
     
@@ -78,15 +78,15 @@ def train(num_epochs = 500, batch_size = 32):
     print(f'use {device}')
 
     # Initialize the model and move it to the chosen device
-    model = ResNet50Regression().to(device)
+    model = UserModule().to(device)
 
     # Define loss function and optimizer
     criterion = nn.MSELoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
-    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.9) # 学习率调整策略
+    if if_use_scheduler:
+        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.9) # 学习率调整策略
 
     # 定义文件夹路径
-    save_folder_path = 'save'
     clear_folder(save_folder_path)
         
     # Training process
@@ -120,15 +120,16 @@ def train(num_epochs = 500, batch_size = 32):
         train_losses.append(avg_train_loss)
         val_losses.append(avg_val_loss)
         
-        # 每个epoch后更新学习率
-        scheduler.step()
+        if if_use_scheduler:
+            scheduler.step() # 每个epoch后更新学习率
+            
         param_group = optimizer.param_groups[0]
         print(f'Epoch {epoch+1}/{num_epochs}, Train loss: {avg_train_loss:.4f}, Validation loss: {avg_val_loss:.4f}, Current learning rate: {param_group["lr"]:.5f}')
 
         if min_val_lost > avg_val_loss:
             min_val_lost = avg_val_loss
-            model_name = f'{save_folder_path}/resnet50_regression_val_{min_val_lost:.4f}.pth'  # 使用损失值作为文件名的一部分
-            torch.save(model.state_dict(), model_name)
+            model_save_path = f'{save_folder_path}/{UserModule.model_type}_val_{min_val_lost:.4f}.pth'  # 使用损失值作为文件名的一部分
+            torch.save(model.state_dict(), model_save_path)
         
     # 获取测试集上的损失值
     test_loss = evaluate(model, test_loader, device, criterion)
@@ -137,12 +138,15 @@ def train(num_epochs = 500, batch_size = 32):
     # 保存模型
     if os.path.exists('archive') == False:
         os.makedirs('archive')
-    model_name = f'archive/resnet50_regression_test_{test_loss:.4f}.pth'  # 使用损失值作为文件名的一部分
-    torch.save(model.state_dict(), model_name)
+    model_save_path = f'archive/{UserModule.model_type}_test_{test_loss:.4f}.pth'  # 使用损失值作为文件名的一部分
+    torch.save(model.state_dict(), model_save_path)
 
     show_losses(train_losses, val_losses)
     
-    return model_name
+    return model_save_path
+
+# Parameters
+save_folder_path = 'save'
 
 if __name__ == '__main__':
     train()
