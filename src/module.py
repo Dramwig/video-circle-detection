@@ -1,6 +1,7 @@
 import torch
 from torch import nn
 from torchvision.models import resnet50, ResNet50_Weights
+from src.config import default_model_type
 
 # Modify ResNet50
 class ResNet50Regression(nn.Module):
@@ -100,7 +101,7 @@ class SEResNet50Regression(nn.Module):
     def _make_layer(self, block, planes, blocks, stride=1):
         downsample = None
         if stride != 1 or self.inplanes != planes * block.expansion:
-            downsample = nn.Sequential(
+            downsample = nn.Sequential(  # 如果输入输出通道数不同
                 nn.Conv2d(self.inplanes, planes * block.expansion, kernel_size=1, stride=stride, bias=False),
                 nn.BatchNorm2d(planes * block.expansion)
             )
@@ -109,7 +110,6 @@ class SEResNet50Regression(nn.Module):
         self.inplanes = planes * block.expansion
         for _ in range(1, blocks):
             layers.append(block(self.inplanes, planes))
-
         return nn.Sequential(*layers)
 
     def forward(self, x):
@@ -126,7 +126,7 @@ class SEResNet50Regression(nn.Module):
 # ----------------------
                             
 class UserModule(nn.Module):
-    def __init__(self, model_type='resnet'):
+    def __init__(self, model_type=default_model_type):
         super(UserModule, self).__init__()
         if model_type == 'resnet':
             self.model = ResNet50Regression()

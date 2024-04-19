@@ -5,8 +5,9 @@ import os
 import shutil
 import matplotlib.pyplot as plt
 from src.get_dataset import get_dataset
-from src.module import UserModule
+from src.module import UserModule as UserModule
 from torch import nn
+from src.config import save_folder_path, archive_folder_path
 
 def evaluate(model, test_loader, device, criterion):
     model.eval()  # 将模型设置为评估模式
@@ -128,7 +129,7 @@ def train(num_epochs = 500, batch_size = 32, if_use_scheduler = False):
 
         if min_val_lost > avg_val_loss:
             min_val_lost = avg_val_loss
-            model_save_path = f'{save_folder_path}/{UserModule.model_type}_val_{min_val_lost:.4f}.pth'  # 使用损失值作为文件名的一部分
+            model_save_path = f'{save_folder_path}/{model.model_type}_val_{min_val_lost:.4f}.pth'  # 使用损失值作为文件名的一部分
             torch.save(model.state_dict(), model_save_path)
         
     # 获取测试集上的损失值
@@ -136,17 +137,14 @@ def train(num_epochs = 500, batch_size = 32, if_use_scheduler = False):
     print(f'Test loss: {test_loss}')
 
     # 保存模型
-    if os.path.exists('archive') == False:
-        os.makedirs('archive')
-    model_save_path = f'archive/{UserModule.model_type}_test_{test_loss:.4f}.pth'  # 使用损失值作为文件名的一部分
+    if os.path.exists(archive_folder_path) == False:
+        os.makedirs(archive_folder_path)
+    model_save_path = f'{archive_folder_path}/{model.model_type}_test_{test_loss:.4f}.pth'  # 使用损失值作为文件名的一部分
     torch.save(model.state_dict(), model_save_path)
 
     show_losses(train_losses, val_losses)
     
     return model_save_path
-
-# Parameters
-save_folder_path = 'save'
 
 if __name__ == '__main__':
     train()

@@ -9,9 +9,10 @@ from torchvision import transforms
 import pandas as pd
 import os
 from tqdm import tqdm
-from src.module import UserModule
+from src.module import UserModule as UserModule
 from src.get_dataset import get_dataset, get_kind_dataloader
 from src.train import evaluate
+from src.config import save_folder_path
 
 def load_model(model_path):
     # Initialize the model
@@ -32,7 +33,6 @@ def plot(output_values, str_index = ''):
         plt.show()
 
     # Convert output_values to a DataFrame
-    save_folder_path = 'save'
     if not os.path.exists(save_folder_path):
         os.makedirs(save_folder_path)
     df = pd.DataFrame({'Output Values': output_values})
@@ -135,9 +135,6 @@ def test(dataset_files = None, str_index = '', model_load_path = 'archive/resnet
 
     plot(output_values, str_index)
     fft(output_values, str_index)
-    
-# Parameters
-save_folder_path = 'save'
 
 if __name__ == '__main__':
     # for i in range(1, 6):
